@@ -1,15 +1,12 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import Dashboard from './Dashboard';
 
-const Index = () => {
+export const ProtectedRoute: React.FC = () => {
   const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  return <Dashboard />;
+  return <Outlet />;
 };
-
-export default Index;
