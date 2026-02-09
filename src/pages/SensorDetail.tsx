@@ -123,7 +123,7 @@ export default function SensorDetail() {
         <div className="flex items-start gap-4">
           <div className={cn(
             'p-4 rounded-xl',
-            sensorStatus?.online 
+            sensorStatus?.online && sensorStatus?.status !== 'offline'
               ? 'bg-primary/10 text-primary' 
               : 'bg-muted text-muted-foreground'
           )}>
@@ -141,8 +141,8 @@ export default function SensorDetail() {
                 {CATEGORY_LABELS[sensorDef.category]}
               </span>
               <span className="text-muted-foreground">•</span>
-              <StatusBadge online={sensorStatus?.online ?? false} />
-              {sensorStatus && !sensorStatus.online && (
+              <StatusBadge online={sensorStatus?.online && sensorStatus?.status !== 'offline'} />
+              {sensorStatus && (!sensorStatus.online || sensorStatus.status === 'offline') && (
                 <>
                   <span className="text-muted-foreground">•</span>
                   <span className="text-sm text-muted-foreground">
@@ -158,6 +158,37 @@ export default function SensorDetail() {
           Refresh
         </Button>
       </div>
+      
+      {/* Hardware Offline Alert */}
+      {sensorStatus?.status === 'offline' && (
+        <div className="flex items-start gap-3 p-4 bg-destructive/10 rounded-lg border border-destructive/20">
+          <svg className="h-6 w-6 text-destructive flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <div className="flex-1">
+            <p className="font-medium text-destructive">Sensor Hardware Offline</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              The sensor hardware is disconnected or not responding. The ESP32 firmware has reported this sensor as offline. 
+              Check the sensor wiring, I²C connections, or power supply. Historical data is shown below for reference.
+            </p>
+          </div>
+        </div>
+      )}
+      
+      {/* Warming Up Alert */}
+      {sensorStatus?.status === 'warming_up' && (
+        <div className="flex items-start gap-3 p-4 bg-warning/10 rounded-lg border border-warning/20">
+          <svg className="h-6 w-6 text-warning flex-shrink-0 mt-0.5 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          <div className="flex-1">
+            <p className="font-medium text-warning">Sensor Warming Up</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              The sensor is currently stabilizing after power-on. Readings will be available shortly.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Current Values */}
       {loading ? (
@@ -165,6 +196,24 @@ export default function SensorDetail() {
           {[...Array(4)].map((_, i) => (
             <Skeleton key={i} className="h-24 rounded-xl" />
           ))}
+        </div>
+      ) : sensorStatus?.status === 'offline' ? (
+        <div className="stat-card text-center py-8">
+          <p className="text-muted-foreground">
+            Current readings unavailable - sensor hardware is offline.
+          </p>
+          <p className="text-sm text-muted-foreground mt-2">
+            View historical data below to see previous measurements.
+          </p>
+        </div>
+      ) : sensorStatus?.status === 'warming_up' ? (
+        <div className="stat-card text-center py-8">
+          <div className="flex items-center justify-center gap-3">
+            <div className="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full"></div>
+            <p className="text-muted-foreground">
+              Sensor is warming up - readings will be available soon...
+            </p>
+          </div>
         </div>
       ) : sensorStatus?.online ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

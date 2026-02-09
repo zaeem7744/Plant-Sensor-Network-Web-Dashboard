@@ -18,6 +18,7 @@ export interface SensorStatus {
   online: boolean;
   lastSeen: string;
   readings: Record<string, { value: number; unit: string }>;
+  status?: 'online' | 'offline' | 'warming_up'; // Hardware status from firmware
 }
 
 // Generate a random value within a range with some noise
