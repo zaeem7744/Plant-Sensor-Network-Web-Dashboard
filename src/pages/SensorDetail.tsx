@@ -25,6 +25,66 @@ const CHART_COLORS = [
   'hsl(340 65% 55%)',
 ];
 
+interface ParamStatsCardProps {
+  sensorId: string;
+  paramKey: string;
+  label: string;
+  unit: string;
+  hours: number;
+}
+
+const ParamStatsCard: React.FC<ParamStatsCardProps> = ({
+  sensorId,
+  paramKey,
+  label,
+  unit,
+  hours,
+}) => {
+  const { data, loading } = useSensorHistory(sensorId, paramKey, hours);
+
+  if (loading) {
+    return (
+      <div className="text-center p-4 bg-muted/50 rounded-lg text-sm text-muted-foreground">
+        Loading...
+      </div>
+    );
+  }
+
+  if (!data.length) {
+    return (
+      <div className="text-center p-4 bg-muted/50 rounded-lg text-sm text-muted-foreground">
+        <p className="text-xs mb-1">{label}</p>
+        <p>No data in selected range</p>
+      </div>
+    );
+  }
+
+  const values = data.map(d => d.value);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const avg = values.reduce((a, b) => a + b, 0) / values.length;
+
+  return (
+    <div className="text-center p-4 bg-muted/50 rounded-lg">
+      <p className="text-xs text-muted-foreground mb-1">{label}</p>
+      <div className="space-y-1">
+        <p className="text-sm">
+          <span className="text-muted-foreground">Min:</span>{' '}
+          <span className="font-medium">{min.toFixed(2)} {unit}</span>
+        </p>
+        <p className="text-sm">
+          <span className="text-muted-foreground">Max:</span>{' '}
+          <span className="font-medium">{max.toFixed(2)} {unit}</span>
+        </p>
+        <p className="text-sm">
+          <span className="text-muted-foreground">Avg:</span>{' '}
+          <span className="font-medium">{avg.toFixed(2)} {unit}</span>
+        </p>
+      </div>
+    </div>
+  );
+};
+
 export default function SensorDetail() {
   const { sensorId } = useParams<{ sensorId: string }>();
   const { sensors, loading, refetch } = useSensorData();
@@ -169,29 +229,21 @@ export default function SensorDetail() {
       {/* Stats Summary */}
       <div className="stat-card">
         <h3 className="font-semibold text-foreground mb-4">Statistics Summary</h3>
-        <div className="grid grid-cols-3 gap-4">
+        <p className="text-xs text-muted-foreground mb-3">
+          Calculated from history over the selected time range.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {sensorDef.parameters
             .filter(p => p.key !== 'error_code')
             .map(param => (
-              <div key={param.key} className="text-center p-4 bg-muted/50 rounded-lg">
-                <p className="text-xs text-muted-foreground mb-1">{param.label}</p>
-                <div className="space-y-1">
-                  <p className="text-sm">
-                    <span className="text-muted-foreground">Min:</span>{' '}
-                    <span className="font-medium">{(param.min ?? 0).toFixed(1)}</span>
-                  </p>
-                  <p className="text-sm">
-                    <span className="text-muted-foreground">Max:</span>{' '}
-                    <span className="font-medium">{(param.max ?? 100).toFixed(1)}</span>
-                  </p>
-                  <p className="text-sm">
-                    <span className="text-muted-foreground">Avg:</span>{' '}
-                    <span className="font-medium">
-                      {(((param.min ?? 0) + (param.max ?? 100)) / 2).toFixed(1)}
-                    </span>
-                  </p>
-                </div>
-              </div>
+              <ParamStatsCard
+                key={param.key}
+                sensorId={sensorDef.id}
+                paramKey={param.key}
+                label={param.label}
+                unit={param.unit}
+                hours={timeRange}
+              />
             ))}
         </div>
       </div>

@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
-import { 
-  generateCurrentReadings, 
-  generateHistoricalData, 
-  generateOverviewStats,
+import type { 
   SensorStatus,
   SensorReading 
 } from '@/lib/mockData';
+
+// Base URL for the Python backend (FastAPI)
+// Adjust this if you deploy the backend elsewhere.
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
 
 // Polling interval in milliseconds
 const POLLING_INTERVAL = 3000;
@@ -15,12 +16,17 @@ export const useSensorData = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchSensors = useCallback(() => {
+  const fetchSensors = useCallback(async () => {
     try {
-      const data = generateCurrentReadings();
+      const res = await fetch(`${API_BASE_URL}/api/sensors/current`);
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+      const data: SensorStatus[] = await res.json();
       setSensors(data);
       setError(null);
     } catch (err) {
+      console.error('Failed to fetch sensor data', err);
       setError('Failed to fetch sensor data');
     } finally {
       setLoading(false);
@@ -36,15 +42,33 @@ export const useSensorData = () => {
   return { sensors, loading, error, refetch: fetchSensors };
 };
 
+export interface OverviewStats {
+  totalSensors: number;
+  onlineSensors: number;
+  offlineSensors: number;
+  totalMeasurements: number;
+  avgTemperature: number | null;
+  avgHumidity: number | null;
+}
+
 export const useOverviewStats = () => {
-  const [stats, setStats] = useState<ReturnType<typeof generateOverviewStats> | null>(null);
+  const [stats, setStats] = useState<OverviewStats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchStats = () => {
-      const data = generateOverviewStats();
-      setStats(data);
-      setLoading(false);
+    const fetchStats = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/overview`);
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+        const data: OverviewStats = await res.json();
+        setStats(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Failed to fetch overview stats', err);
+        setLoading(false);
+      }
     };
 
     fetchStats();
@@ -64,15 +88,29 @@ export const useSensorHistory = (
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    // Simulate API delay
-    const timer = setTimeout(() => {
-      const readings = generateHistoricalData(sensorId, parameter, hours);
-      setData(readings);
-      setLoading(false);
-    }, 300);
+    const fetchHistory = async () => {
+      setLoading(true);
+      try {
+        const url = new URL(`${API_BASE_URL}/api/sensors/history`);
+        url.searchParams.set('sensor_id', sensorId);
+        url.searchParams.set('parameter', parameter);
+        url.searchParams.set('hours', String(hours));
 
-    return () => clearTimeout(timer);
+        const res = await fetch(url.toString());
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+        const readings: SensorReading[] = await res.json();
+        setData(readings);
+      } catch (err) {
+        console.error('Failed to fetch sensor history', err);
+        setData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHistory();
   }, [sensorId, parameter, hours]);
 
   return { data, loading };

@@ -13,7 +13,7 @@ export interface SensorDefinition {
   id: string;
   name: string;
   description: string;
-  category: 'environment' | 'light' | 'gas' | 'soil';
+  category: 'environment' | 'light' | 'gas' | 'soil' | 'temperature';
   icon: string;
   parameters: SensorParameter[];
 }
@@ -39,6 +39,26 @@ export const SENSORS: SensorDefinition[] = [
     icon: 'Sun',
     parameters: [
       { key: 'lux', label: 'Light Intensity', unit: 'lux', min: 0, max: 65535 },
+    ],
+  },
+  {
+    id: 'MLX90614',
+    name: 'MLX90614 IR Temperature',
+    description: 'Non-contact infrared temperature sensor',
+    category: 'temperature',
+    icon: 'Thermometer',
+    parameters: [
+      { key: 'object_temp_c', label: 'Object Temperature', unit: '°C', min: -40, max: 125 },
+    ],
+  },
+  {
+    id: 'SOIL_CAP_I2C',
+    name: 'Soil Moisture (I2C)',
+    description: 'Capacitive soil moisture sensor',
+    category: 'soil',
+    icon: 'Droplet',
+    parameters: [
+      { key: 'moisture', label: 'Soil Moisture', unit: '', min: 200, max: 2000 },
     ],
   },
   {
@@ -75,7 +95,7 @@ export const SENSORS: SensorDefinition[] = [
     ],
   },
   {
-    id: 'HCHO',
+    id: 'HCHO_UART',
     name: 'HCHO Formaldehyde',
     description: 'Formaldehyde concentration sensor',
     category: 'gas',
@@ -149,6 +169,7 @@ export const CATEGORY_LABELS: Record<SensorDefinition['category'], string> = {
   light: 'Light',
   gas: 'Gas',
   soil: 'Soil',
+  temperature: 'Temperature',
 };
 
 export const CATEGORY_COLORS: Record<SensorDefinition['category'], string> = {
@@ -156,4 +177,5 @@ export const CATEGORY_COLORS: Record<SensorDefinition['category'], string> = {
   light: 'hsl(42 85% 55%)',
   gas: 'hsl(200 70% 50%)',
   soil: 'hsl(25 60% 45%)',
+  temperature: 'hsl(15 85% 60%)',
 };

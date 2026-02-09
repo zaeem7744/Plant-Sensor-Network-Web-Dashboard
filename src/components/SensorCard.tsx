@@ -49,7 +49,7 @@ export const SensorCard: React.FC<SensorCardProps> = ({ sensor }) => {
         <StatusBadge online={sensor.online} showLabel={false} />
       </div>
 
-      {sensor.online && primaryValue ? (
+      {primaryValue ? (
         <div className="space-y-2">
           {definition.parameters.slice(0, 3).map(param => {
             const reading = sensor.readings[param.key];
