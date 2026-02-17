@@ -2,7 +2,7 @@
 
 Real-time monitoring dashboard for Plant Sensor Network built with React, TypeScript, and Vite.
 
-## 🌟 Features
+##  Features
 
 - **Real-time Sensor Monitoring**: Live updates every few seconds
 - **Historical Charts**: Interactive graphs with configurable time ranges
@@ -13,13 +13,13 @@ Real-time monitoring dashboard for Plant Sensor Network built with React, TypeSc
 - **Responsive Design**: Works on desktop, tablet, and mobile
 - **Modern UI**: Clean interface with Tailwind CSS and shadcn/ui components
 
-## 📋 Requirements
+##  Requirements
 
 - Node.js 16 or higher
 - npm or yarn
-- Backend API server running (see backend repository at `D:\Projects\plant-sensor-backend`)
+- Backend API server running (see backend repository at `plant-sensor-backend`)
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### 1. Install Dependencies
 
@@ -132,7 +132,7 @@ const { data, error, isLoading } = useSWR(
 - 5 seconds: `5000` (default)
 - 10 seconds: `10000`
 
-## 🏗️ Project Structure
+##  Project Structure
 
 ```
 src/
@@ -160,7 +160,7 @@ src/
 └── main.tsx                    # Entry point
 ```
 
-## 🧰 Troubleshooting
+##  Troubleshooting
 
 ### Dashboard Shows "No Data"
 
@@ -223,7 +223,7 @@ export default defineConfig({
 })
 ```
 
-## 📦 Build and Deploy
+##  Build and Deploy
 
 ### Development Build
 
@@ -255,7 +255,7 @@ npm run preview
 
 **Important**: Update `.env` with production backend URL before building.
 
-## 🔌 API Integration
+##  API Integration
 
 ### SWR Data Fetching
 
@@ -269,7 +269,7 @@ Dashboard uses [SWR](https://swr.vercel.app/) for efficient data fetching with a
 | `/api/sensors/history` | `useSensorHistory()` | 10 seconds |
 | `/api/overview` | `useOverview()` | 10 seconds |
 
-## 📊 Data Display Logic
+##  Data Display Logic
 
 ### Online/Offline Status
 
@@ -295,7 +295,7 @@ This dashboard works with:
 
 See main project documentation at `D:\Projects\Plant Monitoring Sensor Network\Delivery Documents\` for complete system setup.
 
-## 📝 Technologies Used
+##  Technologies Used
 
 - **React 18**: UI framework
 - **TypeScript**: Type-safe JavaScript
@@ -308,7 +308,7 @@ See main project documentation at `D:\Projects\Plant Monitoring Sensor Network\D
 - **Lucide React**: Icon library
 - **date-fns**: Date formatting
 
-## 📜 Scripts
+##  Scripts
 
 ```bash
 npm run dev          # Start development server
@@ -317,10 +317,6 @@ npm run preview      # Preview production build
 npm run lint         # Run ESLint
 npm run type-check   # TypeScript type checking
 ```
-
-## 🙏 Acknowledgments
-
-Built with modern React ecosystem tools for optimal performance and developer experience.
 
 ---
 
