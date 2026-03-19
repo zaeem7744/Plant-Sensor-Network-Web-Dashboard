@@ -1,4 +1,4 @@
-# ðŸŒ± Plant Sensor Network â€” Web Dashboard
+# 🌱 Plant Sensor Network — Web Dashboard
 
 ![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
@@ -11,18 +11,18 @@ Real-time web dashboard for the Plant Sensor Network IoT system. Visualizes data
 
 ---
 
-## ðŸ”§ Features
+## 🔧 Features
 
-- **Real-Time Sensor Display** â€” Live readings from 13 environmental sensors with status indicators
-- **24h Averages** â€” Temperature and humidity averages displayed at a glance
-- **Historical Charts** â€” Interactive time-series charts using Recharts for trend analysis
-- **Sensor Detail Views** â€” Drill down into individual sensor data with detailed statistics
-- **Responsive Design** â€” Clean, modern UI with Tailwind CSS and shadcn/ui components
-- **Auto-Refresh** â€” SWR-based data fetching with automatic revalidation
+- **Real-Time Sensor Display** — Live readings from 13 environmental sensors with status indicators
+- **24h Averages** — Temperature and humidity averages displayed at a glance
+- **Historical Charts** — Interactive time-series charts using Recharts for trend analysis
+- **Sensor Detail Views** — Drill down into individual sensor data with detailed statistics
+- **Responsive Design** — Clean, modern UI with Tailwind CSS and shadcn/ui components
+- **Auto-Refresh** — SWR-based data fetching with automatic revalidation
 
 ---
 
-## ðŸš€ Quick Start
+## 🚀 Quick Start
 
 ```bash
 # Install dependencies
@@ -36,7 +36,7 @@ The dashboard will be available at `http://localhost:5173`
 
 ---
 
-## ðŸ› ï¸ Tech Stack
+## 🛠️ Tech Stack
 
 - **Framework:** React 18 + TypeScript
 - **Build Tool:** Vite
@@ -47,9 +47,9 @@ The dashboard will be available at `http://localhost:5173`
 
 ---
 
-## ðŸ‘¤ Author
+## 👤 Author
 
 **Muhammad Zaeem Sarfraz**
-- ðŸ”— [LinkedIn](https://www.linkedin.com/in/zaeemsarfraz7744/)
-- ðŸ“§ Zaeem.7744@gmail.com
-- ðŸŒ Vaasa, Finland
+- 🔗 [LinkedIn](https://www.linkedin.com/in/zaeemsarfraz7744/)
+- 📧 Zaeem.7744@gmail.com
+- 🌍 Vaasa, Finland
